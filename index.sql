@@ -28,3 +28,19 @@
 -- ex 4
 
 --SELECT customer_id, SUM (amount) FROM payment GROUP BY customer_id HAVING SUM (amount)>(SELECT ROUND(AVG (amount), 2) FROM payment)
+
+SELECT 
+	payment.customer_id,
+	customer.first_name,
+	customer.last_name,
+	staff.first_name,
+	staff.last_name, 
+	amount
+	
+FROM
+	payment
+
+	INNER JOIN customer
+		ON customer.customer_id = payment.customer_id
+	INNER JOIN staff
+		ON staff.staff_id = payment.staff_id
