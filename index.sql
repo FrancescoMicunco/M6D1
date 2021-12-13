@@ -30,17 +30,18 @@
 --SELECT customer_id, SUM (amount) FROM payment GROUP BY customer_id HAVING SUM (amount)>(SELECT ROUND(AVG (amount), 2) FROM payment)
 
 SELECT 
-	payment.customer_id,
-	customer.first_name,
-	customer.last_name,
-	staff.first_name,
-	staff.last_name, 
-	amount
-	
+	customer.first_name AS customer_name,
+	customer.last_name AS customer_last_name,
+	staff.first_name AS staf_name,
+	staff.last_name AS staff_last_name, 
+	SUM (amount) AS total_spent
+		
 FROM
-	payment
+	customer
 
-	INNER JOIN customer
-		ON customer.customer_id = payment.customer_id
+	INNER JOIN payment
+		ON payment.customer_id = customer.customer_id
 	INNER JOIN staff
-		ON staff.staff_id = payment.staff_id
+		ON payment.staff_id = staff.staff_id
+		GROUP BY customer.customer_id, staff.staff_id, payment.payment_id
+HAVING SUM(amount)> (SELECT ROUND(AVG (amount), 2) FROM payment)
